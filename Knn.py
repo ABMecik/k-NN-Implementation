@@ -1,7 +1,3 @@
-#MEF University - COMP 462 Introduction to Machine Learning
-#k-Nearest Neighbor Classification
-
-#Author: Artun Burak Mecik
 #Date: 2.16.2020
 #Description: In this code, the variation of the k-NN algorithm in different distance metrics and k (neighbor number) value is examined.
 #In this process, iris dataset was used.
