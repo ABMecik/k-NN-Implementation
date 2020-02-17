@@ -14,34 +14,41 @@ import matplotlib.patches as mpatches
 
 
 """
-This class implements all relevant operations of the k-NN algorithm.
-It was designed in a similar way to the sklearn.neighbors.KNeighborsClassifier library.
-While defining Class, it takes the number of neighbors (k) and distance metric as standard.
-The default k value is set to 3 and the default distance metric is set to euclidean.
+
 """
 class KNNClassifier:
     def __init__(self, k=3, method="euclidean"):
+        """
+        This class implements all relevant operations of the k-NN algorithm.
+        It was designed in a similar way to the sklearn.neighbors.KNeighborsClassifier library.
+        The default k value is set to 3 and the default distance metric is set to euclidean.
+        :param k:number of neighbors
+        :param method: distance metric
+        """
         self.k=k
         self.method=method
 
-    """
-    This function imports training data.
-    """
     def fit(self, X_train, y_train):
+        """
+        This function imports training data.
+        :param X_train: train dara input
+        :param y_train: train data output
+        """
         self.X_train=X_train
         self.y_train=y_train
 
-
-    """
-    The help of this function of distance function finds the distance of the desired point to the data in the training data.
-    The distances found are listed.
-    The closest neighbor is taken as much as the number of neighbors (k) and the most affiliate value is selected.
-    In this case, the k value should be an odd number in order to prevent equality.
-    However, when an even number is entered, the system selects the closest value in case of equality.
-    The system takes a dataset as input and returns the prediction list.
-    It can work in different data sets except for the draw and split_list method.
-    """
     def predict(self, X_test):
+        """
+        The help of this function of distance function finds the distance of the desired point to the data in the training data.
+        The distances found are listed.
+        The closest neighbor is taken as much as the number of neighbors (k) and the most affiliate value is selected.
+        In this case, the k value should be an odd number in order to prevent equality.
+        However, when an even number is entered, the system selects the closest value in case of equality.
+        The system takes a dataset as input and returns the prediction list.
+        It can work in different data sets except for the draw and split_list method.
+        :param X_test: test data input
+        :return: predictions
+        """
         predictions = []
         for i in X_test:
             distances = []
@@ -52,10 +59,14 @@ class KNNClassifier:
             predictions.append(self.response(neighbors))
         return predictions
 
-    """
-    In accordance with the desired metric, the distance between the given data is calculated.
-    """
+
     def distance(self, data1, data2):
+        """
+        In accordance with the desired metric, the distance between the given data is calculated.
+        :param data1: predict point
+        :param data2: train data single point
+        :return: distance between points
+        """
         length = len(data1)
         if self.method == "euclidean":
             distance = 0
@@ -68,10 +79,13 @@ class KNNClassifier:
                 distance += abs(float(data1[x])-float(data2[x]))
             return distance
 
-    """
-    It counts the possible options in the given data and returns the option that gives the highest count value.
-    """
+
     def response(self, neighbors):
+        """
+        It counts the possible options in the given data and returns the option that gives the highest count value.
+        :param neighbors: neighbors
+        :return: most counted option
+        """
         dss={}
         for (k,l) in neighbors:
             if k in dss:
@@ -82,10 +96,14 @@ class KNNClassifier:
         k = list(dss.keys())
         return k[v.index(max(v))]
 
-    """
-    It turns accuracy rate by comparing predictions and real results.
-    """
+
     def getAccuracy(self, y_prend, y_test):
+        """
+        It turns accuracy rate by comparing predictions and real results.
+        :param y_prend: test data predictions
+        :param y_test: test data actual outputs
+        :return: accuracy rate
+        """
         length = len(y_prend)
         crr=0
         for i in range(length):
@@ -96,10 +114,14 @@ class KNNClassifier:
         else:
             return (crr/length)*100
 
-    """
-    It turns error count by comparing predictions and real results.
-    """
+
     def getErrorcount(self, y_prend, y_test):
+        """
+        It turns error count by comparing predictions and real results.
+        :param y_prend: test data predictions
+        :param y_test: test data actual outputs
+        :return: error count
+        """
         length = len(y_prend)
         crr=0
         for i in range(length):
@@ -107,14 +129,13 @@ class KNNClassifier:
                 crr += 1
         return crr
 
-
-    """
-    With the help of the Matplotlib library, he draws decision boundaries.
-    This section is designed to operate only in the iris dataset and in line with certain parameters, unlike other sections in the k-NN algorithm.
-    It takes a single subplot as input.
-    """
     #only for iris dataset
     def draw(self, ax):
+        """
+        With the help of the Matplotlib library, he draws decision boundaries.
+        This section is designed to operate only in the iris dataset and in line with certain parameters, unlike other sections in the k-NN algorithm.
+        :param ax: single subplot as input.
+        """
         iris_dict = {"Iris-setosa": 0, "Iris-versicolor": 1, "Iris-virginica": 2}
         X_x, X_y = self.split_list(self.X_train)
 
@@ -139,10 +160,13 @@ class KNNClassifier:
         ax.pcolormesh(map_x, map_y, boundary, cmap=ListedColormap(['#FFAAAA', '#AAFFAA','#AAAAFF']))
         ax.scatter(X_x, X_y, c=y, cmap=ListedColormap(['#FF0000', '#00FF00','#0000FF']), marker="o", s=12, edgecolors=(0, 0, 0, 1), linewidths=.5)
 
-    """
-    Subdividing to dataset.
-    """
+
     def split_list(self, X):
+        """
+        Subdividing to dataset.
+        :param X: dataset
+        :return: diveded data
+        """
         x=[]
         y=[]
         for [k1,k2] in X:
@@ -161,12 +185,13 @@ class Data:
     def __init__(self):
         super(self)
 
-
-    """
-    It reads the data from the desired file.
-    """
     @classmethod
     def readlocal(cls, path):
+        """
+        It reads the data from the desired file.
+        :param path: file path
+        :return: lines
+        """
         all=[]
         with open(path, 'r', encoding='utf8') as f:
             for i in f.readlines():
@@ -176,15 +201,21 @@ class Data:
                 all.append(arr)
         return np.array(all)
 
-    """
-    It divides the data based on test|train and input|output.
-    The distribution of the data is received from the user.
-    The distribution can be done numerically or as a percentage.
-    The data is divided into 70% education and 30% test data by default.
-    The data is divided numerically as requested in this code. (30 training and 20 test data)
-    """
+
     @classmethod
     def split_data(cls, data, type="percentage", train_size=.7, test_size=.3):
+        """
+        It divides the data based on test|train and input|output.
+        The distribution of the data is received from the user.
+        The distribution can be done numerically or as a percentage.
+        The data is divided into 70% education and 30% test data by default.
+        The data is divided numerically as requested in this code. (30 training and 20 test data)
+        :param data: lines/data
+        :param type: split type
+        :param train_size: train data rate/size
+        :param test_size: test data rate/size
+        :return: data based on test|train and input|output.
+        """
 
         X_train, X_test, y_train, y_test = [], [], [], []
 
